@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="Space Grotesk, Inter, Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-label="La carte dessinée par l'agent Cartographe : le serveur relié aux machines, une fiche par machine, les écarts aux règles et la relecture du matin">
+  <defs>
+    <pattern id="grille" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24,0 H0 V24" fill="none" stroke="#ffffff" stroke-opacity="0.05"/></pattern>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c3d2f5"/></marker>
+    <marker id="j" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffe45e"/></marker>
+  </defs>
+  <rect width="960" height="500" rx="14" fill="#123a8f"/>
+  <rect width="960" height="500" rx="14" fill="url(#grille)"/>
+  <text x="32" y="44" fill="#f4f7ff" font-size="20" font-weight="700">La carte du système, vue par le Cartographe</text>
+  <text x="32" y="68" fill="#c3d2f5" font-size="13">relevée sans IA toutes les 15 min · relue par Claude chaque matin à 6 h, en lecture seule</text>
+  <text x="928" y="44" fill="#ffe45e" font-size="11" text-anchor="end" font-family="Space Mono, Consolas, Menlo, monospace">FIG. 01</text>
+
+  <!-- schéma : serveur -->
+  <rect x="206" y="92" width="176" height="60" rx="10" fill="#0d2f78" stroke="#f4f7ff" stroke-width="1.5"/>
+  <text x="294" y="117" fill="#f4f7ff" font-size="15" font-weight="700" text-anchor="middle">Serveur</text>
+  <text x="294" y="138" fill="#c3d2f5" font-size="11" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">2 jobs actifs · 5 agents</text>
+  <path d="M294,152 V176" stroke="#c3d2f5" stroke-width="2"/>
+  <path d="M72,176 H512" stroke="#c3d2f5" stroke-width="2"/>
+
+  <!-- schéma : machines -->
+  <path d="M72,176 V200 M160,176 V200 M248,176 V200 M336,176 V200 M424,176 V200 M512,176 V200" stroke="#c3d2f5" stroke-width="2"/>
+  <rect x="34" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#f4f7ff" stroke-opacity="0.8"/>
+  <text x="72" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">cloud</text>
+  <text x="72" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">1 actif</text>
+
+  <rect x="122" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#ffe45e" stroke-width="1.5"/>
+  <text x="160" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">poste-1</text>
+  <text x="160" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">1 actif</text>
+
+  <rect x="210" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#f4f7ff" stroke-opacity="0.8" stroke-dasharray="5 4"/>
+  <text x="248" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">poste-2</text>
+  <text x="248" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">1 actif</text>
+  <circle cx="284" cy="201" r="7" fill="#ffe45e"/>
+  <text x="284" y="205" fill="#0d2f78" font-size="10" font-weight="700" text-anchor="middle">!</text>
+
+  <rect x="298" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#f4f7ff" stroke-opacity="0.8"/>
+  <text x="336" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">poste-3</text>
+  <text x="336" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">0 actif</text>
+
+  <rect x="386" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#ffe45e" stroke-width="1.5"/>
+  <text x="424" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">tour</text>
+  <text x="424" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">1 actif</text>
+
+  <rect x="474" y="200" width="76" height="52" rx="9" fill="#0d2f78" stroke="#f4f7ff" stroke-opacity="0.8"/>
+  <text x="512" y="222" fill="#f4f7ff" font-size="13" font-weight="700" text-anchor="middle">portable</text>
+  <text x="512" y="240" fill="#c3d2f5" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">4 actifs</text>
+  <circle cx="548" cy="201" r="7" fill="#ffe45e"/>
+  <text x="548" y="205" fill="#0d2f78" font-size="10" font-weight="700" text-anchor="middle">!</text>
+
+  <!-- un clic : la fiche -->
+  <path d="M248,252 V286 H616" stroke="#c3d2f5" stroke-width="2" fill="none" marker-end="url(#b)"/>
+  <text x="420" y="279" fill="#c3d2f5" font-size="12">un clic : sa fiche</text>
+
+  <!-- fiche de la machine -->
+  <rect x="618" y="92" width="310" height="208" rx="10" fill="#0d2f78" stroke="#ffffff" stroke-opacity="0.35"/>
+  <circle cx="640" cy="114" r="5" fill="none" stroke="#f4f7ff" stroke-dasharray="2 2"/>
+  <text x="654" y="119" fill="#f4f7ff" font-size="15" font-weight="700">poste-2</text>
+  <text x="722" y="119" fill="#c3d2f5" font-size="12">éteint ou injoignable</text>
+  <text x="634" y="146" fill="#f4f7ff" font-size="12">Prêté au projet A pour ses rendus</text>
+  <text x="634" y="163" fill="#f4f7ff" font-size="12">jusqu'à vendredi.</text>
+  <text x="634" y="190" fill="#ffe45e" font-size="12" font-family="Space Mono, Consolas, Menlo, monospace">Jobs (1)</text>
+  <text x="634" y="210" fill="#f4f7ff" font-size="12"><tspan font-weight="700">Projet A</tspan> · rendu des scènes</text>
+  <rect x="826" y="198" width="66" height="17" rx="4" fill="none" stroke="#f4f7ff" stroke-opacity="0.6"/>
+  <text x="859" y="211" fill="#f4f7ff" font-size="10" text-anchor="middle" font-family="Space Mono, Consolas, Menlo, monospace">en cours</text>
+  <text x="634" y="237" fill="#ffe45e" font-size="12">Écart : un job en cours sur une</text>
+  <text x="634" y="254" fill="#ffe45e" font-size="12">machine éteinte ou injoignable</text>
+  <text x="634" y="282" fill="#c3d2f5" font-size="11" font-family="Space Mono, Consolas, Menlo, monospace">Sessions (0) · Services (0)</text>
+
+  <!-- écarts du programme -->
+  <rect x="32" y="318" width="568" height="96" rx="10" fill="#0d2f78" stroke="#ffe45e" stroke-width="1.5"/>
+  <text x="48" y="343" fill="#ffe45e" font-size="15" font-weight="700">Écarts aux règles, relevés par le programme</text>
+  <text x="48" y="368" fill="#f4f7ff" font-size="12"><tspan font-weight="700">poste-2</tspan> · un job en cours sur une machine éteinte, depuis 2 h 10</text>
+  <text x="48" y="392" fill="#f4f7ff" font-size="12"><tspan font-weight="700">portable</tspan> · 4 jobs en cours pour 3 au maximum</text>
+
+  <!-- relecture de 6 h -->
+  <path d="M600,366 H616" stroke="#ffe45e" stroke-width="2" marker-end="url(#j)"/>
+  <rect x="618" y="318" width="310" height="150" rx="10" fill="#0d2f78" stroke="#ffffff" stroke-opacity="0.35"/>
+  <text x="634" y="343" fill="#f4f7ff" font-size="15" font-weight="700">6 h : la relecture de Claude</text>
+  <text x="634" y="368" fill="#f4f7ff" font-size="12"><tspan font-weight="700">poste-2 : réel.</tspan> Correction :</text>
+  <text x="634" y="386" fill="#f4f7ff" font-size="12">relancer le job sur un poste libre.</text>
+  <text x="634" y="404" fill="#c3d2f5" font-size="12">Qui : le manager.</text>
+  <text x="634" y="430" fill="#f4f7ff" font-size="12"><tspan font-weight="700">portable : faux écart.</tspan> Un job</text>
+  <text x="634" y="448" fill="#f4f7ff" font-size="12">fini, encore marqué en cours.</text>
+
+  <!-- légende -->
+  <rect x="34" y="438" width="14" height="10" rx="2" fill="none" stroke="#f4f7ff" stroke-opacity="0.8"/>
+  <text x="54" y="447" fill="#c3d2f5" font-size="11">en ligne</text>
+  <rect x="116" y="438" width="14" height="10" rx="2" fill="none" stroke="#ffe45e" stroke-width="1.5"/>
+  <text x="136" y="447" fill="#c3d2f5" font-size="11">occupé</text>
+  <rect x="192" y="438" width="14" height="10" rx="2" fill="none" stroke="#f4f7ff" stroke-dasharray="3 2"/>
+  <text x="212" y="447" fill="#c3d2f5" font-size="11">éteint</text>
+  <circle cx="267" cy="443" r="5" fill="#ffe45e"/>
+  <text x="278" y="447" fill="#c3d2f5" font-size="11">écart</text>
+  <text x="34" y="470" fill="#c3d2f5" font-size="11">Un projet confidentiel n'apparaît que comme « Projet perso », sans description.</text>
+</svg>

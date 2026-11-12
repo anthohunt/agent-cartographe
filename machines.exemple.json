@@ -1,0 +1,32 @@
+{
+ "noms_postes": {
+  "PC-0001": "poste-1",
+  "PC-0002": "poste-2"
+ },
+ "roles": {
+  "mon-serveur": [
+   "vps",
+   "Serveur (tour de contrôle)"
+  ],
+  "ma-tour": [
+   "tour",
+   "Tour"
+  ],
+  "mon-portable": [
+   "laptop",
+   "Portable"
+  ],
+  "mon-telephone": [
+   "telephone",
+   "Téléphone"
+  ]
+ },
+ "legende_postes": "Postes prêtés",
+ "regles": {
+  "vps_sans_agent_jusqua": "",
+  "vps_sans_agent_texte": "Aucun agent de travail sur le serveur",
+  "tour_motif_permis": "",
+  "tour_texte": "La tour est réservée à un usage précis",
+  "laptop_max": 3
+ }
+}
