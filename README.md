@@ -112,7 +112,7 @@ The instructions and comments are in French. It is one of the permanent agents t
 
 ## Its page
 
-The page of this agent on ingevision.cloud is not published yet.
+[Its page on ingevision.cloud](https://ingevision.cloud/en/ai-agents/?p=agent-cartographe) presents what it does, in English and French.
 
 ---
 
@@ -230,7 +230,7 @@ Fait partie des agents permanents qui tournent seuls chaque jour dans un petit s
 
 ### Sa fiche
 
-La fiche de cet agent sur ingevision.cloud n'est pas encore publiée.
+[Sa fiche sur ingevision.cloud](https://ingevision.cloud/agents-ia/?p=agent-cartographe) présente ce qu'il fait, en français et en anglais.
 
 ---
 
