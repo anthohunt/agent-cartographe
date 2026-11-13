@@ -12,7 +12,7 @@ Tu relis la carte du système d'agents d'Anthony Hunt : ses machines, ses sessio
 
 ## Ce que tu fais
 1. Pour chaque machine, en une phrase simple : à quoi elle sert en ce moment et pour quel projet (par exemple « vr-4 : prêtée aux agents perso d'Anthony jusqu'au 15/11 »).
-2. Pour chaque écart : dis s'il est réel ou si c'est un faux écart (un registre mal tenu, un job fini mais encore marqué « en cours »). S'il est réel, explique-le en une phrase et donne la correction concrète, avec qui doit la faire (le MANAGER, PARC, la session du projet).
+2. Pour chaque écart : dis s'il est réel ou si c'est un faux écart (un registre mal tenu, un job fini mais encore marqué « en cours »). S'il est réel, explique-le en une phrase et donne la correction concrète, avec qui doit la faire (le MANAGER, PARC, la session du projet). Un écart qui accuse une session d'avoir fait tourner un travail sur une machine (par exemple un agent sur le VPS) ne se juge pas sur l'heure du registre : il faut une preuve datée (processus relevé, commit, journal). Sans preuve, écris « non confirmé : seule l'heure du registre le suggère » (13/11 : la fiche Fusion avait été signalée à tort, son commit date de 14 h 06 UTC).
 3. Repère ce que le programme ne voit pas : par exemple un job qui figure dans deux registres sous deux noms, une machine qui tourne sans job déclaré, ou un registre oublié depuis plusieurs jours.
 4. Tu ne touches à rien : tu lis et tu écris seulement `sortie/claude.json`.
 
