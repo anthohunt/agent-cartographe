@@ -42,7 +42,7 @@ def cle_machine(texte):
         if k.lower() in t: return v
     if "cloud" in t: return "cloud"
     if "oracle" in t: return "oracle"
-    if "laptop" in t or "i7922" in t or "portable" in t: return "laptop"
+    if "laptop" in t or "portable" in t: return "laptop"
     if "tour" in t: return "tour"
     if "iomega" in t or "poste" in t: return "postes"
     if "vps" in t or "srv" in t: return "vps"
