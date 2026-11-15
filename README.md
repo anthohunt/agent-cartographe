@@ -2,7 +2,7 @@
 
 Every 15 minutes, it redraws the map of a system of AI agents: the machines, what runs on each one, and the gaps with the rules; every morning, Claude reads the map and explains the gaps.
 
-![The map drawn by the agent: the server linked to the loaned workstations, the tower and the laptop, one card per machine, a gap to the rules and the morning reading](docs/cartographe-carte.svg)
+![The map drawn by the agent: the server linked to the compute workstations, the tower and the laptop, one card per machine, a gap to the rules and the morning reading](docs/cartographe-carte.svg)
 
 ```mermaid
 %%{init: {"flowchart": {"curve": "step"}}}%%
@@ -21,8 +21,8 @@ flowchart TD
 
 ## What it does
 
-- **Surveys the whole system every 15 minutes, without AI.** `releve.py` reads the machines of the private network (Tailscale), the central job registry and the registries of the sub-managers, the keeper of the loaned workstations, the cards of the permanent agents, the sessions and Claude processes on the server, its containers, its scheduled tasks, its load and its memory. It only reads.
-- **Checks the placement rules in code.** No work agent on the server before a set date; the server never saturated (load above 8, swap above 80 %); the tower only for one allowed use; at most N active jobs on the laptop; no job "running" on a machine that is off; no loaned workstation busy without a declared job. Each gap is written down with its time.
+- **Surveys the whole system every 15 minutes, without AI.** `releve.py` reads the machines of the private network (Tailscale), the central job registry and the registries of the sub-managers, the keeper of the compute workstations, the cards of the permanent agents, the sessions and Claude processes on the server, its containers, its scheduled tasks, its load and its memory. It only reads.
+- **Checks the placement rules in code.** No work agent on the server before a set date; the server never saturated (load above 8, swap above 80 %); the tower only for one allowed use; at most N active jobs on the laptop; no job "running" on a machine that is off; no compute workstation busy without a declared job. Each gap is written down with its time.
 - **Draws the map.** `page.py` writes one HTML page: a diagram of the server and the machines around it with right-angled links, one card per machine (jobs and their progress, permanent agents, sessions, online services, public ports marked), the list of gaps. The page reloads itself every 5 minutes.
 - **Has Claude read it every morning at 6 am, Paris time.** Claude gets the map, the gaps since 6 am the day before (with start and end time), the rules in plain words and its own reading of the day before. It writes one sentence per machine on what it is used for now, says for each gap whether it is real or a false gap (a registry badly kept, a job finished but still marked running), gives the fix and who should make it, and notes what the program cannot see.
 - **Puts the result in the morning report.** If Claude's reading did not happen, the report gives the program's gaps alone, with their hours.
@@ -35,7 +35,7 @@ It is meant for someone who runs many agents on several machines and wants to kn
 ```
 Carte : https://tableau.example.org/carte/
 
-Deux postes prêtés sont occupés, le serveur est calme. Un écart demande une action : un job marqué en cours sur un poste éteint.
+Deux postes de calcul sont occupés, le serveur est calme. Un écart demande une action : un job marqué en cours sur un poste éteint.
 
 Écarts aux règles (relus par Claude) :
 • poste-2 — Un job en cours sur une machine éteinte ou injoignable : réel. Le poste s'est éteint à 2 h et le job n'a pas été repris. Correction : relancer le job sur un poste libre (MANAGER).
@@ -62,10 +62,10 @@ Taken from `releve.sh`, `releve.py`, `page.py`, `nuit.sh` and `deposer.py`:
 - SSH to an account that can run `docker ps` (target in `VPS_ROOT` or `~/.config/agents/vps-root`).
 - What it reads when it exists, and treats as empty otherwise: the central job registry, the registries of the sub-managers, the cards of the permanent agents, and the workstation keeper (`parc.py etat --json`).
 - A folder served by a web server, where `page.py` writes `carte/index.html` (`/home/claude/agents-permanents-dash/`, which must exist), and its address in `TABLEAU_URL` or `~/.config/agents/tableau-url`.
-- For the morning reading: a launcher that starts a Claude Code agent on a loaned workstation and returns code 75 when none is free, an account selector and the token files it reads, [Claude Code](https://code.claude.com/docs/en/overview) on the workstation. The reading waits in the same queue as other agents (`/tmp/agents-site.lock`).
+- For the morning reading: a launcher that starts a Claude Code agent on a compute workstation and returns code 75 when none is free, an account selector and the token files it reads, [Claude Code](https://code.claude.com/docs/en/overview) on the workstation. The reading waits in the same queue as other agents (`/tmp/agents-site.lock`).
 - Outside this repository: the tool that builds the morning report.
 
-The diagram has fixed places: the server, the Claude cloud sessions, six loaned workstations, the tower, the laptop and a second server. Their keys are written in `page.py` and `releve.py`; a machine with another key gets a card but no box in the diagram. The paths under `/home/claude` are written in the scripts; on another installation, change them.
+The diagram has fixed places: the server, the Claude cloud sessions, six compute workstations, the tower, the laptop and a second server. Their keys are written in `page.py` and `releve.py`; a machine with another key gets a card but no box in the diagram. The paths under `/home/claude` are written in the scripts; on another installation, change them.
 
 ## Install
 
@@ -76,7 +76,7 @@ mkdir -p etat ~/.config/agents
 cat > etat/machines.local.json <<'EOF'
 {"noms_postes": {"PC-0001": "poste-1", "PC-0002": "poste-2"},
  "roles": {"mon-serveur": ["vps", "Serveur"], "ma-tour": ["tour", "Tour"], "mon-portable": ["laptop", "Portable"]},
- "legende_postes": "Postes prêtés",
+ "legende_postes": "Postes de calcul",
  "regles": {"vps_sans_agent_jusqua": "2026-12-01T00:00", "vps_sans_agent_texte": "Aucun agent de travail sur le serveur",
             "tour_motif_permis": "rendu|essai", "tour_texte": "La tour sert aux rendus et aux essais", "laptop_max": 3}}
 EOF
@@ -90,7 +90,7 @@ python3 deposer.py "$(TZ=Europe/Paris date +%F)" --apercu
 # 0,30 * * * * /chemin/nuit.sh
 ```
 
-The keys of `roles` are the machine names on the private network; `noms_postes` gives a short name to each loaned workstation. Without `etat/machines.local.json`, the scripts use `machines.exemple.json`; without `etat/regles.local.md`, Claude reads `regles.exemple.md`. `deposer.py <date> --apercu` prints the part of the morning report without sending it. If no workstation is free at 6 am, `nuit.sh` tries again at the next half hour; once the report is filed, a marker in `logs/` stops it for the day. `FORCE=1` runs it outside the window.
+The keys of `roles` are the machine names on the private network; `noms_postes` gives a short name to each compute workstation. Without `etat/machines.local.json`, the scripts use `machines.exemple.json`; without `etat/regles.local.md`, Claude reads `regles.exemple.md`. `deposer.py <date> --apercu` prints the part of the morning report without sending it. If no workstation is free at 6 am, `nuit.sh` tries again at the next half hour; once the report is filed, a marker in `logs/` stops it for the day. `FORCE=1` runs it outside the window.
 
 `releve.sh` creates `logs/` and `etat/`, `nuit.sh` creates `verrous/`. They stay out of git, like the local files.
 
@@ -101,7 +101,7 @@ The keys of `roles` are the machine names on the private network; `noms_postes` 
 | `releve.sh` | Every 15 minutes: survey, then page; keeps 14 days of gaps and a short log. |
 | `releve.py` | The survey without AI: machines, jobs, agents, sessions, services, gaps to the rules. Writes `etat/carte.json`. |
 | `page.py` | The map page: diagram, one card per machine, gaps, Claude's reading if there is one. |
-| `nuit.sh` | The morning reading: a fresh survey, Claude on a loaned workstation (40 minutes at most, read-only), then the page and the report. |
+| `nuit.sh` | The morning reading: a fresh survey, Claude on a compute workstation (40 minutes at most, read-only), then the page and the report. |
 | `consigne.md` | The instructions given to Claude for the reading. |
 | `ecarts-jour.py` | Groups the gaps since 6 am the day before: start, end, number of surveys. |
 | `deposer.py` | Writes the cartographer's part of the morning report. |
@@ -122,7 +122,7 @@ The instructions and comments are in French. It is one of the permanent agents t
 
 Toutes les 15 minutes, il redessine la carte d'un système d'agents IA : les machines, ce qui tourne sur chacune et les écarts aux règles ; chaque matin, Claude relit la carte et explique les écarts.
 
-![La carte dessinée par l'agent : le serveur relié aux postes prêtés, à la tour et au portable, une fiche par machine, un écart aux règles et la relecture du matin](docs/cartographe-carte.svg)
+![La carte dessinée par l'agent : le serveur relié aux postes de calcul, à la tour et au portable, une fiche par machine, un écart aux règles et la relecture du matin](docs/cartographe-carte.svg)
 
 ```mermaid
 %%{init: {"flowchart": {"curve": "step"}}}%%
@@ -139,8 +139,8 @@ flowchart TD
 
 ### Ce qu'il fait
 
-- **Relève tout le système toutes les 15 minutes, sans IA.** `releve.py` lit les machines du réseau privé (Tailscale), le registre central des jobs et ceux des sous-managers, le gardien des postes prêtés, les fiches des agents permanents, les sessions et processus Claude du serveur, ses conteneurs, ses tâches programmées, sa charge et sa mémoire. Il ne fait que lire.
-- **Vérifie les règles de placement dans le code.** Aucun agent de travail sur le serveur avant une date fixée ; le serveur jamais saturé (charge au-dessus de 8, mémoire d'échange au-dessus de 80 %) ; la tour pour un seul usage permis ; au plus N jobs actifs sur le portable ; aucun job « en cours » sur une machine éteinte ; aucun poste prêté occupé sans job déclaré. Chaque écart est noté avec son heure.
+- **Relève tout le système toutes les 15 minutes, sans IA.** `releve.py` lit les machines du réseau privé (Tailscale), le registre central des jobs et ceux des sous-managers, le gardien des postes de calcul, les fiches des agents permanents, les sessions et processus Claude du serveur, ses conteneurs, ses tâches programmées, sa charge et sa mémoire. Il ne fait que lire.
+- **Vérifie les règles de placement dans le code.** Aucun agent de travail sur le serveur avant une date fixée ; le serveur jamais saturé (charge au-dessus de 8, mémoire d'échange au-dessus de 80 %) ; la tour pour un seul usage permis ; au plus N jobs actifs sur le portable ; aucun job « en cours » sur une machine éteinte ; aucun poste de calcul occupé sans job déclaré. Chaque écart est noté avec son heure.
 - **Dessine la carte.** `page.py` écrit une page HTML : un schéma du serveur et des machines autour, reliées à angles droits, une fiche par machine (jobs et avancement, agents permanents, sessions, services en ligne, ports publics signalés), la liste des écarts. La page se recharge seule toutes les 5 minutes.
 - **Fait relire la carte par Claude chaque matin à 6 h, heure de Paris.** Claude reçoit la carte, les écarts depuis la veille 6 h (avec heure de début et de fin), les règles en langage courant et sa relecture de la veille. Il écrit une phrase par machine sur ce à quoi elle sert en ce moment, dit pour chaque écart s'il est réel ou si c'est un faux écart (un registre mal tenu, un job fini mais encore marqué en cours), donne la correction et qui doit la faire, et note ce que le programme ne voit pas.
 - **Met le résultat dans le rapport du matin.** Si la relecture de Claude n'a pas eu lieu, le rapport donne les écarts du programme seul, avec leurs heures.
@@ -153,7 +153,7 @@ Il sert à une personne qui fait tourner beaucoup d'agents sur plusieurs machine
 ```
 Carte : https://tableau.example.org/carte/
 
-Deux postes prêtés sont occupés, le serveur est calme. Un écart demande une action : un job marqué en cours sur un poste éteint.
+Deux postes de calcul sont occupés, le serveur est calme. Un écart demande une action : un job marqué en cours sur un poste éteint.
 
 Écarts aux règles (relus par Claude) :
 • poste-2 — Un job en cours sur une machine éteinte ou injoignable : réel. Le poste s'est éteint à 2 h et le job n'a pas été repris. Correction : relancer le job sur un poste libre (MANAGER).
@@ -180,10 +180,10 @@ Tiré de `releve.sh`, `releve.py`, `page.py`, `nuit.sh` et `deposer.py` :
 - Un accès SSH à un compte qui peut lancer `docker ps` (cible dans `VPS_ROOT` ou `~/.config/agents/vps-root`).
 - Ce qu'il lit s'il existe, et compte pour vide sinon : le registre central des jobs, les registres des sous-managers, les fiches des agents permanents et le gardien des postes (`parc.py etat --json`).
 - Un dossier servi par un serveur web, où `page.py` écrit `carte/index.html` (`/home/claude/agents-permanents-dash/`, qui doit exister), et son adresse dans `TABLEAU_URL` ou `~/.config/agents/tableau-url`.
-- Pour la relecture du matin : un lanceur qui démarre un agent Claude Code sur un poste prêté et rend le code 75 quand aucun n'est libre, un sélecteur de compte et les fichiers de jetons qu'il lit, [Claude Code](https://code.claude.com/docs/en/overview) sur le poste. La relecture attend dans la même file que d'autres agents (`/tmp/agents-site.lock`).
+- Pour la relecture du matin : un lanceur qui démarre un agent Claude Code sur un poste de calcul et rend le code 75 quand aucun n'est libre, un sélecteur de compte et les fichiers de jetons qu'il lit, [Claude Code](https://code.claude.com/docs/en/overview) sur le poste. La relecture attend dans la même file que d'autres agents (`/tmp/agents-site.lock`).
 - Hors de ce dépôt : l'outil qui assemble le rapport du matin.
 
-Le schéma a des places fixes : le serveur, les sessions Claude dans le cloud, six postes prêtés, la tour, le portable et un second serveur. Leurs clés sont écrites dans `page.py` et `releve.py` ; une machine qui a une autre clé a une fiche mais pas de case dans le schéma. Les chemins sous `/home/claude` sont écrits dans les scripts ; sur une autre installation, il faut les changer.
+Le schéma a des places fixes : le serveur, les sessions Claude dans le cloud, six postes de calcul, la tour, le portable et un second serveur. Leurs clés sont écrites dans `page.py` et `releve.py` ; une machine qui a une autre clé a une fiche mais pas de case dans le schéma. Les chemins sous `/home/claude` sont écrits dans les scripts ; sur une autre installation, il faut les changer.
 
 ### Installation
 
@@ -194,7 +194,7 @@ mkdir -p etat ~/.config/agents
 cat > etat/machines.local.json <<'EOF'
 {"noms_postes": {"PC-0001": "poste-1", "PC-0002": "poste-2"},
  "roles": {"mon-serveur": ["vps", "Serveur"], "ma-tour": ["tour", "Tour"], "mon-portable": ["laptop", "Portable"]},
- "legende_postes": "Postes prêtés",
+ "legende_postes": "Postes de calcul",
  "regles": {"vps_sans_agent_jusqua": "2026-12-01T00:00", "vps_sans_agent_texte": "Aucun agent de travail sur le serveur",
             "tour_motif_permis": "rendu|essai", "tour_texte": "La tour sert aux rendus et aux essais", "laptop_max": 3}}
 EOF
@@ -208,7 +208,7 @@ python3 deposer.py "$(TZ=Europe/Paris date +%F)" --apercu
 # 0,30 * * * * /chemin/nuit.sh
 ```
 
-Les clés de `roles` sont les noms des machines sur le réseau privé ; `noms_postes` donne un nom court à chaque poste prêté. Sans `etat/machines.local.json`, les scripts prennent `machines.exemple.json` ; sans `etat/regles.local.md`, Claude lit `regles.exemple.md`. `deposer.py <date> --apercu` affiche la partie du rapport du matin sans l'envoyer. Si aucun poste n'est libre à 6 h, `nuit.sh` réessaie à la demi-heure suivante ; une fois le rapport déposé, une marque dans `logs/` l'arrête pour la journée. `FORCE=1` le lance hors du créneau.
+Les clés de `roles` sont les noms des machines sur le réseau privé ; `noms_postes` donne un nom court à chaque poste de calcul. Sans `etat/machines.local.json`, les scripts prennent `machines.exemple.json` ; sans `etat/regles.local.md`, Claude lit `regles.exemple.md`. `deposer.py <date> --apercu` affiche la partie du rapport du matin sans l'envoyer. Si aucun poste n'est libre à 6 h, `nuit.sh` réessaie à la demi-heure suivante ; une fois le rapport déposé, une marque dans `logs/` l'arrête pour la journée. `FORCE=1` le lance hors du créneau.
 
 `releve.sh` crée `logs/` et `etat/`, `nuit.sh` crée `verrous/`. Ils restent hors de git, comme les fichiers locaux.
 
@@ -219,7 +219,7 @@ Les clés de `roles` sont les noms des machines sur le réseau privé ; `noms_po
 | `releve.sh` | Toutes les 15 minutes : relevé, puis page ; garde 14 jours d'écarts et un journal court. |
 | `releve.py` | Le relevé sans IA : machines, jobs, agents, sessions, services, écarts aux règles. Écrit `etat/carte.json`. |
 | `page.py` | La page de la carte : schéma, une fiche par machine, écarts, relecture de Claude s'il y en a une. |
-| `nuit.sh` | La relecture du matin : un relevé neuf, Claude sur un poste prêté (40 minutes au plus, en lecture seule), puis la page et le rapport. |
+| `nuit.sh` | La relecture du matin : un relevé neuf, Claude sur un poste de calcul (40 minutes au plus, en lecture seule), puis la page et le rapport. |
 | `consigne.md` | La consigne donnée à Claude pour la relecture. |
 | `ecarts-jour.py` | Regroupe les écarts depuis la veille 6 h : début, fin, nombre de relevés. |
 | `deposer.py` | Écrit la partie cartographe du rapport du matin. |

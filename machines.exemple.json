@@ -21,7 +21,7 @@
    "Téléphone"
   ]
  },
- "legende_postes": "Postes prêtés",
+ "legende_postes": "Postes de calcul",
  "regles": {
   "vps_sans_agent_jusqua": "",
   "vps_sans_agent_texte": "Aucun agent de travail sur le serveur",

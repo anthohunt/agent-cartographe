@@ -9,7 +9,7 @@ ICI = Path(__file__).resolve().parent
 OUT = Path("/home/claude/agents-permanents-dash/carte"); OUT.mkdir(parents=True, exist_ok=True)
 e = lambda s: html.escape(str(s if s is not None else ""))
 _ici = Path(__file__).resolve().parent; _cf = _ici / "etat" / "machines.local.json"
-CONF_LEG = json.loads((_cf if _cf.exists() else _ici / "machines.exemple.json").read_text()).get("legende_postes", "Postes prêtés")
+CONF_LEG = json.loads((_cf if _cf.exists() else _ici / "machines.exemple.json").read_text()).get("legende_postes", "Postes de calcul")
 C = json.loads((ICI / "etat" / "carte.json").read_text())
 CL = {}
 try: CL = json.loads((ICI / "etat" / "claude.json").read_text())
