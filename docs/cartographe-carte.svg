@@ -56,7 +56,7 @@
   <circle cx="640" cy="114" r="5" fill="none" stroke="#f4f7ff" stroke-dasharray="2 2"/>
   <text x="654" y="119" fill="#f4f7ff" font-size="15" font-weight="700">poste-2</text>
   <text x="722" y="119" fill="#c3d2f5" font-size="12">éteint ou injoignable</text>
-  <text x="634" y="146" fill="#f4f7ff" font-size="12">Prêté au projet A pour ses rendus</text>
+  <text x="634" y="146" fill="#f4f7ff" font-size="12">Calcul du projet A (rendus)</text>
   <text x="634" y="163" fill="#f4f7ff" font-size="12">jusqu'à vendredi.</text>
   <text x="634" y="190" fill="#ffe45e" font-size="12" font-family="Space Mono, Consolas, Menlo, monospace">Jobs (1)</text>
   <text x="634" y="210" fill="#f4f7ff" font-size="12"><tspan font-weight="700">Projet A</tspan> · rendu des scènes</text>

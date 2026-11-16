@@ -60,7 +60,7 @@ for k in ORDRE + autres:
     st, lib = etat_machine(m)
     info = []
     if k == "vps": info.append(f"charge {m.get('charge', 0):.1f} · mémoire libre {m.get('memoire_libre_pct')} % · échange {m.get('echange_pct')} % · {m.get('claude_processus')} processus Claude · {m.get('taches_programmees')} tâches programmées")
-    if m.get("perso_en_cours"): info.append("passage sur un poste prêté en cours : " + ", ".join(m["perso_en_cours"]))
+    if m.get("perso_en_cours"): info.append("passage sur un poste de calcul en cours : " + ", ".join(m["perso_en_cours"]))
     if m.get("parc", {}).get("travail"): info.append(m["parc"]["travail"])
     expl = (CL.get("machines") or {}).get(k)
     F.append(f'<section class="carte {st}" id="m-{k}"><h3><span class="pt"></span>{e(TITRES.get(k, m["titre"]))}<span class="et">{e(lib)}</span></h3>'

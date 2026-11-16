@@ -109,7 +109,7 @@ def main():
         mach = a.get("machine") or ""
         k = "vps" if mach.startswith("VPS") else cle_machine(mach)
         ajoute(k, "agents", {"id": a["id"], "nom": a["nom"], "rythme": a.get("rythme") or a.get("quand", "")[:60],
-                             "claude_sur": "poste IOMEGA prêté" if "IOMEGA" in mach else ("tour" if "tour" in mach.lower() and not mach.startswith("VPS") else "")})
+                             "claude_sur": "poste de calcul IOMEGA" if "IOMEGA" in mach else ("tour" if "tour" in mach.lower() and not mach.startswith("VPS") else "")})
     # VPS : sessions tmux (sessions Claude), processus Claude, charge, conteneurs, crontab
     for l in sh("tmux ls -F '#{session_name}\t#{session_created}' 2>/dev/null").splitlines():
         n, _, cr = l.partition("\t")
@@ -121,7 +121,7 @@ def main():
         M["vps"]["echange_pct"] = round(100 * (1 - int(mem["SwapFree"]) / max(1, int(mem["SwapTotal"])))) if int(mem.get("SwapTotal", 0)) else 0
         M["vps"]["claude_processus"] = len([l for l in sh("ps -eo args").splitlines() if re.match(r"\S*claude(-reel/claude)?\s", l)])
         noms = set()
-        for l in sh("ps -eo pid,args").splitlines():   # passages sur un poste prêté : leur nom est dans l'environnement
+        for l in sh("ps -eo pid,args").splitlines():   # passages sur un poste de calcul : leur nom est dans l'environnement
             pid, _, args = l.strip().partition(" ")
             if "perso-claude" in args and pid.isdigit():
                 try:
