@@ -1,6 +1,6 @@
 #!/bin/bash
-# Agent Cartographe : relecture de Claude chaque matin à 6 h (heure de Paris), avant le rapport du matin ; sur un poste de calcul
-# IOMEGA (perso-claude, sans trace), dans la file des agents du site. Écrit etat/claude.json (lu par la page) et dépose la
+# Agent Cartographe : relecture de Claude chaque matin à 6 h (heure de Paris), avant le rapport du matin ; sur un poste de
+# calcul, dans la file des agents du site. Écrit etat/claude.json (lu par la page) et dépose la
 # partie « cartographe » du rapport du matin. Usage : nuit.sh   (FORCE=1 : hors heure)
 set -u
 R=$(cd "$(dirname "$0")" && pwd); J=$(TZ=Europe/Paris date +%F)
