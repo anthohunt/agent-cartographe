@@ -15,7 +15,7 @@ CL = {}
 try: CL = json.loads((ICI / "etat" / "claude.json").read_text())
 except Exception: pass
 M = C["machines"]
-ORDRE = ["vps", "cloud", "vr-1", "vr-2", "vr-3", "vr-4", "vr-5", "vr-6", "postes", "tour", "laptop", "oracle"]
+ORDRE = ["vps", "cloud", "iomega-1", "iomega-2", "iomega-3", "iomega-4", "iomega-5", "iomega-6", "postes", "tour", "laptop", "oracle"]
 autres = [k for k in M if k not in ORDRE]
 TITRES = {"postes": "Postes IOMEGA (poste non précisé)", "autre": "Sans machine (en pause ou en attente)"}
 actif = lambda j: bool(re.search(r"en cours|tourne|actif|lanc|en place|programm", (j.get("etat") or "").lower()))
@@ -31,13 +31,13 @@ ecarts_par = {}
 for x in C["ecarts"]: ecarts_par.setdefault(x["machine"], []).append(x)
 
 # ---------------------------------------------------------------- schéma (SVG, connexions à angles droits)
-noeuds = [("cloud", 30), ("vr-1", 190), ("vr-2", 290), ("vr-3", 390), ("vr-4", 490), ("vr-5", 590), ("vr-6", 690), ("tour", 820), ("laptop", 940), ("oracle", 1060)]
+noeuds = [("cloud", 30), ("iomega-1", 190), ("iomega-2", 290), ("iomega-3", 390), ("iomega-4", 490), ("iomega-5", 590), ("iomega-6", 690), ("tour", 820), ("laptop", 940), ("oracle", 1060)]
 S = ['<svg viewBox="0 0 1160 300" role="img" aria-label="Schéma : le VPS relié par Tailscale aux postes IOMEGA, à la tour, au laptop, au serveur Oracle et aux sessions cloud">']
 S.append('<line x1="580" y1="96" x2="580" y2="150" class="fil"/><line x1="100" y1="150" x2="1120" y2="150" class="fil"/>')
 def boite(k, x, y, w, h, grand=False):
     m = M.get(k) or {"cle": k, "titre": k, "jobs": [], "agents": [], "en_ligne": None}
     st, _ = etat_machine(m); nj = len([j for j in m.get("jobs", []) if actif(j)]); na = len(m.get("agents", []))
-    titre = {"vps": "VPS", "cloud": "Claude cloud", "oracle": "Oracle", "tour": "Tour", "laptop": "Laptop"}.get(k, k)
+    titre = {"vps": "VPS", "cloud": "Claude cloud", "oracle": "Oracle", "tour": "Tour", "laptop": "Laptop"}.get(k, k.replace("iomega-", "Iomega ") if k.startswith("iomega-") else k)
     alerte = '<circle cx="%d" cy="%d" r="7" class="alerte"/>' % (x + w - 8, y + 8) if ecarts_par.get(k) else ""
     sous = f"{nj} job{'s' if nj > 1 else ''} actif{'s' if nj > 1 else ''} · {na} agents" if grand else f"{nj} actif" + ("s" if nj > 1 else "")
     return (f'<a href="#m-{k}"><g class="noeud {st}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10"/>'
@@ -46,7 +46,7 @@ def boite(k, x, y, w, h, grand=False):
 S.append(boite("vps", 470, 20, 220, 76, True))
 for k, cx in noeuds:
     S.append(f'<line x1="{cx + 40}" y1="150" x2="{cx + 40}" y2="190" class="fil"/>')
-    S.append(boite(k, cx, 190, 80 if k.startswith("vr-") else 100, 64))
+    S.append(boite(k, cx, 190, 80 if k.startswith("iomega-") else 100, 64))
 S.append('<text x="120" y="282" class="leg">' + e(CONF_LEG) + '</text></svg>')
 
 # ---------------------------------------------------------------- fiches des machines

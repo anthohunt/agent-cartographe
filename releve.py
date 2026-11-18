@@ -36,8 +36,8 @@ def lire(p, defaut=None):
 def cle_machine(texte):
     """« vr-4 », « poste IOMEGA (vr-1) », « VPS », « cloud »… → clé de machine de la carte."""
     t = (texte or "").lower()
-    m = re.search(r"vr-?([1-6])", t)
-    if m: return f"vr-{m[1]}"
+    m = re.search(r"(?:(?<!iomega )\bvr-|iomega[- ]?(?:vr-)?)([1-6])\b", t)
+    if m: return f"iomega-{m[1]}"
     for k, v in NOMS_POSTES.items():
         if k.lower() in t: return v
     if "cloud" in t: return "cloud"
@@ -70,6 +70,7 @@ def main():
         h = p.get("HostName") or ""
         if not h: continue
         nom = h.replace("iomega-", "").upper() if h.lower().startswith(("iomega-i", "i6", "i7")) else h
+        if re.fullmatch(r"iomega-(vr-)?[1-6]", h.lower()): nom = next((k for k, v in NOMS_POSTES.items() if v == "iomega-" + h[-1]), h)
         if nom.upper() in NOMS_POSTES:
             cle, titre, groupe = NOMS_POSTES[nom.upper()], f"{NOMS_POSTES[nom.upper()]} ({nom.upper()})", "postes"
         elif nom in ROLES:
@@ -152,7 +153,7 @@ def main():
         if m.get("en_ligne") is False:
             for j in m["jobs"]:
                 if actif(j): ecart("Un job en cours sur une machine éteinte ou injoignable", k, f"{j['projet']} : {j['job']}")
-        if k.startswith("vr-") and m.get("parc") and not m["parc"]["libre"] and not m["jobs"] and not m["parc"].get("occupe_par"):
+        if k.startswith("iomega-") and m.get("parc") and not m["parc"]["libre"] and not m["jobs"] and not m["parc"].get("occupe_par"):
             ecart("Poste occupé sans job déclaré", k, "occupé, aucun job dans les registres")
     out = {"quand": now.isoformat(timespec="minutes"), "machines": M, "ecarts": E}
     if SECRET:
